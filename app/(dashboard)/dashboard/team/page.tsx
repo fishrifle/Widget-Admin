@@ -389,9 +389,9 @@ export default function TeamPage() {
                           {new Date(member.invited_at).toLocaleTimeString()}
                         </p>
                       )}
-                      {member.status === "accepted" && member.accepted_at && (
+                      {member.status === "accepted" && (member as any).accepted_at && (
                         <p className="text-xs text-gray-400 mt-1">
-                          Joined {new Date(member.accepted_at).toLocaleDateString()}
+                          Joined {new Date((member as any).accepted_at).toLocaleDateString()}
                         </p>
                       )}
                     </div>

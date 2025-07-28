@@ -78,7 +78,7 @@ export async function POST(req: Request) {
 
       // Create invoice record
       await supabase.from("invoices").insert({
-        organization_id: invoice.metadata.organization_id,
+        organization_id: invoice.metadata?.organization_id,
         stripe_invoice_id: invoice.id,
         amount: invoice.amount_paid / 100,
         currency: invoice.currency,

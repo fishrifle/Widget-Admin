@@ -40,12 +40,12 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const { id } = evt.data;
-  const eventType = evt.type;
+  const { id } = (evt as any).data;
+  const eventType = (evt as any).type;
 
   if (eventType === "user.created") {
     try {
-      const { email_addresses, first_name, last_name } = evt.data;
+      const { email_addresses, first_name, last_name } = (evt as any).data;
       const email = email_addresses[0]?.email_address;
 
       console.log("Creating user in Supabase:", { id, email, first_name, last_name });
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
 
   if (eventType === "user.updated") {
     try {
-      const { email_addresses, first_name, last_name } = evt.data;
+      const { email_addresses, first_name, last_name } = (evt as any).data;
       const email = email_addresses[0]?.email_address;
 
       const { error } = await supabase

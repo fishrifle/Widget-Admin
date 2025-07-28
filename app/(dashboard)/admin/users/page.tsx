@@ -75,6 +75,30 @@ export default function AdminUsersPage() {
     fetchAllUsers();
   }, []);
 
+  // Function to filter users based on search and role
+  const filterUsers = useCallback(() => {
+    let filtered = users;
+
+    // Filter by search term (name, email, or organization)
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(user => 
+        user.email.toLowerCase().includes(searchLower) ||
+        user.first_name?.toLowerCase().includes(searchLower) ||
+        user.last_name?.toLowerCase().includes(searchLower) ||
+        user.organization?.name.toLowerCase().includes(searchLower) ||
+        user.organization?.display_name?.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Filter by role
+    if (roleFilter !== "all") {
+      filtered = filtered.filter(user => user.role === roleFilter);
+    }
+
+    setFilteredUsers(filtered);
+  }, [users, searchTerm, roleFilter]);
+
   // Filter users when search or role filter changes
   useEffect(() => {
     filterUsers();
@@ -146,30 +170,6 @@ export default function AdminUsersPage() {
       setLoading(false);
     }
   }
-
-  // Function to filter users based on search and role
-  const filterUsers = useCallback(() => {
-    let filtered = users;
-
-    // Filter by search term (name, email, or organization)
-    if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(user => 
-        user.email.toLowerCase().includes(searchLower) ||
-        user.first_name?.toLowerCase().includes(searchLower) ||
-        user.last_name?.toLowerCase().includes(searchLower) ||
-        user.organization?.name.toLowerCase().includes(searchLower) ||
-        user.organization?.display_name?.toLowerCase().includes(searchLower)
-      );
-    }
-
-    // Filter by role
-    if (roleFilter !== "all") {
-      filtered = filtered.filter(user => user.role === roleFilter);
-    }
-
-    setFilteredUsers(filtered);
-  }, [users, searchTerm, roleFilter]);
 
   // Function to get role icon
   function getRoleIcon(role: string) {

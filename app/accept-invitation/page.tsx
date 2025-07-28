@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+
+export const dynamic = 'force-dynamic';
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
@@ -23,16 +25,6 @@ export default function AcceptInvitationPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-  useEffect(() => {
-    if (!token) {
-      setError("Invalid invitation link");
-      setLoading(false);
-      return;
-    }
-
-    validateInvitation();
-  }, [token, validateInvitation]);
-
   const validateInvitation = useCallback(async () => {
     try {
       const { data, error } = await supabase
@@ -53,6 +45,16 @@ export default function AcceptInvitationPage() {
       setLoading(false);
     }
   }, [token]);
+
+  useEffect(() => {
+    if (!token) {
+      setError("Invalid invitation link");
+      setLoading(false);
+      return;
+    }
+
+    validateInvitation();
+  }, [token, validateInvitation]);
 
   const acceptInvitation = async () => {
     if (!invitation || !firstName.trim() || !lastName.trim()) return;

@@ -43,11 +43,6 @@ export function OrganizationSettings({ organizationId }: OrganizationSettingsPro
     termsOfServiceUrl: "",
   });
 
-  useEffect(() => {
-    fetchOrganization();
-    fetchStripeStatus();
-  }, [organizationId, fetchOrganization, fetchStripeStatus]);
-
   const fetchOrganization = useCallback(async () => {
     try {
       // Using imported supabase client
@@ -76,7 +71,7 @@ export function OrganizationSettings({ organizationId }: OrganizationSettingsPro
     } finally {
       setLoading(false);
     }
-  }, [organizationId]);
+  }, [organizationId, toast]);
 
   const fetchStripeStatus = useCallback(async () => {
     try {
@@ -95,7 +90,12 @@ export function OrganizationSettings({ organizationId }: OrganizationSettingsPro
         requiresAction: false,
       });
     }
-  }, [organizationId]);
+  }, [organizationId, checkStatus]);
+
+  useEffect(() => {
+    fetchOrganization();
+    fetchStripeStatus();
+  }, [organizationId, fetchOrganization, fetchStripeStatus]);
 
   const handleSaveProfile = async () => {
     setSaving(true);

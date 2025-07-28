@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { Button } from "@/components/ui/Button";
@@ -39,13 +39,7 @@ export default function WidgetAnalyticsPage() {
   const [dateRange, setDateRange] = useState("30");
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (widget) {
-      fetchAnalytics();
-    }
-  }, [widget, dateRange]);
-
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     if (!widget) return;
     
     setLoading(true);
@@ -73,7 +67,13 @@ export default function WidgetAnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [widget]);
+
+  useEffect(() => {
+    if (widget) {
+      fetchAnalytics();
+    }
+  }, [widget, dateRange, fetchAnalytics]);
 
   if (widgetLoading || loading) {
     return (

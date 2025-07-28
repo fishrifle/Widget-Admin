@@ -263,7 +263,7 @@ CREATE TABLE notifications (
   title TEXT NOT NULL,
   message TEXT NOT NULL,
   data JSONB DEFAULT '{}',
-  channels notification_channel[] DEFAULT ARRAY['email', 'in_app'],
+  channels notification_channel[] DEFAULT ARRAY['email'::notification_channel, 'in_app'::notification_channel],
   read BOOLEAN DEFAULT false,
   sent BOOLEAN DEFAULT false,
   sent_at TIMESTAMPTZ,
@@ -277,7 +277,7 @@ CREATE TABLE notification_preferences (
   user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
   type notification_type NOT NULL,
-  channels notification_channel[] DEFAULT ARRAY['email', 'in_app'],
+  channels notification_channel[] DEFAULT ARRAY['email'::notification_channel, 'in_app'::notification_channel],
   enabled BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
@@ -451,14 +451,14 @@ RETURNS TRIGGER AS $$
 BEGIN
   INSERT INTO notification_preferences (user_id, organization_id, type, channels, enabled)
   VALUES 
-    (NEW.id, NEW.organization_id, 'donation_received', ARRAY['email', 'in_app'], true),
-    (NEW.id, NEW.organization_id, 'recurring_donation_processed', ARRAY['email'], true),
-    (NEW.id, NEW.organization_id, 'recurring_donation_failed', ARRAY['email'], true),
-    (NEW.id, NEW.organization_id, 'goal_reached', ARRAY['email', 'in_app'], true),
-    (NEW.id, NEW.organization_id, 'milestone_reached', ARRAY['in_app'], true),
-    (NEW.id, NEW.organization_id, 'team_invitation', ARRAY['email'], true),
-    (NEW.id, NEW.organization_id, 'widget_created', ARRAY['in_app'], true),
-    (NEW.id, NEW.organization_id, 'subscription_cancelled', ARRAY['email'], true)
+    (NEW.id, NEW.organization_id, 'donation_received', ARRAY['email'::notification_channel, 'in_app'::notification_channel], true),
+    (NEW.id, NEW.organization_id, 'recurring_donation_processed', ARRAY['email'::notification_channel], true),
+    (NEW.id, NEW.organization_id, 'recurring_donation_failed', ARRAY['email'::notification_channel], true),
+    (NEW.id, NEW.organization_id, 'goal_reached', ARRAY['email'::notification_channel, 'in_app'::notification_channel], true),
+    (NEW.id, NEW.organization_id, 'milestone_reached', ARRAY['in_app'::notification_channel], true),
+    (NEW.id, NEW.organization_id, 'team_invitation', ARRAY['email'::notification_channel], true),
+    (NEW.id, NEW.organization_id, 'widget_created', ARRAY['in_app'::notification_channel], true),
+    (NEW.id, NEW.organization_id, 'subscription_cancelled', ARRAY['email'::notification_channel], true)
   ON CONFLICT (user_id, organization_id, type) DO NOTHING;
   
   RETURN NEW;

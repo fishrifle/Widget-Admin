@@ -319,7 +319,6 @@ export default function NotificationSettingsPage() {
                             <Switch
                               checked={setting.channels.includes(channel)}
                               onCheckedChange={() => toggleChannel(setting.type, channel)}
-                              size="sm"
                             />
                             <span className="flex items-center gap-1 text-sm">
                               {channelIcons[channel]}

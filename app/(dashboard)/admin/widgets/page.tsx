@@ -74,6 +74,32 @@ export default function AdminWidgetsPage() {
     fetchAllWidgets();
   }, []);
 
+  // Function to filter widgets based on search and status
+  const filterWidgets = useCallback(() => {
+    let filtered = widgets;
+
+    // Filter by search term (widget name, org name, or email)
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(widget => 
+        widget.name.toLowerCase().includes(searchLower) ||
+        widget.organization.name.toLowerCase().includes(searchLower) ||
+        widget.organization.display_name?.toLowerCase().includes(searchLower) ||
+        widget.organization.email.toLowerCase().includes(searchLower) ||
+        widget.slug.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Filter by status
+    if (statusFilter !== "all") {
+      filtered = filtered.filter(widget => 
+        statusFilter === "active" ? widget.is_active : !widget.is_active
+      );
+    }
+
+    setFilteredWidgets(filtered);
+  }, [widgets, searchTerm, statusFilter]);
+
   // Filter widgets when search or status filter changes
   useEffect(() => {
     filterWidgets();
@@ -168,32 +194,6 @@ export default function AdminWidgetsPage() {
       setLoading(false);
     }
   }
-
-  // Function to filter widgets based on search and status
-  const filterWidgets = useCallback(() => {
-    let filtered = widgets;
-
-    // Filter by search term (widget name, org name, or email)
-    if (searchTerm) {
-      const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(widget => 
-        widget.name.toLowerCase().includes(searchLower) ||
-        widget.organization.name.toLowerCase().includes(searchLower) ||
-        widget.organization.display_name?.toLowerCase().includes(searchLower) ||
-        widget.organization.email.toLowerCase().includes(searchLower) ||
-        widget.slug.toLowerCase().includes(searchLower)
-      );
-    }
-
-    // Filter by status
-    if (statusFilter !== "all") {
-      filtered = filtered.filter(widget => 
-        statusFilter === "active" ? widget.is_active : !widget.is_active
-      );
-    }
-
-    setFilteredWidgets(filtered);
-  }, [widgets, searchTerm, statusFilter]);
 
   // Function to view a widget in admin preview mode
   function viewWidget(slug: string) {

@@ -1,8 +1,9 @@
 import { Database } from "./database.types";
 
-export type Initiative = Database["public"]["Tables"]["initiatives"]["Row"];
-export type InitiativeInsert = Database["public"]["Tables"]["initiatives"]["Insert"];
-export type InitiativeUpdate = Database["public"]["Tables"]["initiatives"]["Update"];
+// Initiative types - using any for now since initiatives table doesn't exist yet
+export type Initiative = any;
+export type InitiativeInsert = any;
+export type InitiativeUpdate = any;
 
 export interface InitiativeConfig {
   name: string;
