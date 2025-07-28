@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Label } from "@/components/ui/Label";
@@ -46,9 +46,9 @@ export function OrganizationSettings({ organizationId }: OrganizationSettingsPro
   useEffect(() => {
     fetchOrganization();
     fetchStripeStatus();
-  }, [organizationId]);
+  }, [organizationId, fetchOrganization, fetchStripeStatus]);
 
-  const fetchOrganization = async () => {
+  const fetchOrganization = useCallback(async () => {
     try {
       // Using imported supabase client
       const { data, error } = await supabase
@@ -76,9 +76,9 @@ export function OrganizationSettings({ organizationId }: OrganizationSettingsPro
     } finally {
       setLoading(false);
     }
-  };
+  }, [organizationId]);
 
-  const fetchStripeStatus = async () => {
+  const fetchStripeStatus = useCallback(async () => {
     try {
       const status = await checkStatus(organizationId);
       setStripeStatus({
@@ -95,7 +95,7 @@ export function OrganizationSettings({ organizationId }: OrganizationSettingsPro
         requiresAction: false,
       });
     }
-  };
+  }, [organizationId]);
 
   const handleSaveProfile = async () => {
     setSaving(true);
