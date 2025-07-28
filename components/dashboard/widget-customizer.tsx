@@ -482,7 +482,7 @@ export function WidgetCustomizer({
 
                 <div>
                   <Label>Suggested Donation Amounts ($)</Label>
-                  <div className="grid grid-cols-5 gap-2 mt-1">
+                  <div className="grid grid-cols-3 gap-2 mt-1">
                     {config.settings.suggestedAmounts.map((amount, index) => (
                       <Input
                         key={index}

@@ -21,7 +21,7 @@ export interface WidgetConfig {
     minimumDonation: number;
     suggestedAmounts: number[];
     showCoverFees: boolean;
-    defaultFrequency: "one-time" | "monthly";
+    defaultFrequency: "one-time" | "monthly" | "yearly";
   };
 }
 

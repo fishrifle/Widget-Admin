@@ -120,18 +120,18 @@ export function WidgetPreview({ config, mode }: WidgetPreviewProps) {
                   Yearly
                 </button>
               </div>
-              {/* Monthly Recurring Notice - Secondary Color Usage */}
-              {selectedFrequency === "monthly" && (
+              {/* Recurring Notice - Secondary Color Usage */}
+              {(selectedFrequency === "monthly" || selectedFrequency === "yearly") && (
                 <div className="relative">
                   <div 
-                    className="text-sm border rounded-md p-3 mb-6"
+                    className="text-xs border rounded-md p-2"
                     style={{ 
                       color: theme.secondaryColor,
                       backgroundColor: theme.secondaryColor + "20",
                       borderColor: theme.secondaryColor + "60"
                     }}
                   >
-                    This will be a <strong>monthly recurring charge</strong>. You can cancel at any time.
+                    This will be a <strong>{selectedFrequency} recurring charge</strong>. You can cancel at any time.
                   </div>
                   {showColorGuide && (
                     <div className="absolute -top-1 -right-1 bg-purple-300 text-xs px-2 py-1 rounded shadow-sm pointer-events-none">

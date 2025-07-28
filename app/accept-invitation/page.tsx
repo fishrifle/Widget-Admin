@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
@@ -31,9 +31,9 @@ export default function AcceptInvitationPage() {
     }
 
     validateInvitation();
-  }, [token]);
+  }, [token, validateInvitation]);
 
-  const validateInvitation = async () => {
+  const validateInvitation = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("users")
@@ -52,7 +52,7 @@ export default function AcceptInvitationPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   const acceptInvitation = async () => {
     if (!invitation || !firstName.trim() || !lastName.trim()) return;

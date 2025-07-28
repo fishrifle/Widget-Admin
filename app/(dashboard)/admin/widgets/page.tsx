@@ -77,7 +77,7 @@ export default function AdminWidgetsPage() {
   // Filter widgets when search or status filter changes
   useEffect(() => {
     filterWidgets();
-  }, [widgets, searchTerm, statusFilter]);
+  }, [filterWidgets]);
 
   // Function to get all widgets from all organizations
   async function fetchAllWidgets() {
@@ -170,7 +170,7 @@ export default function AdminWidgetsPage() {
   }
 
   // Function to filter widgets based on search and status
-  function filterWidgets() {
+  const filterWidgets = useCallback(() => {
     let filtered = widgets;
 
     // Filter by search term (widget name, org name, or email)
@@ -193,7 +193,7 @@ export default function AdminWidgetsPage() {
     }
 
     setFilteredWidgets(filtered);
-  }
+  }, [widgets, searchTerm, statusFilter]);
 
   // Function to view a widget in admin preview mode
   function viewWidget(slug: string) {
