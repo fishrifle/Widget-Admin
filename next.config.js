@@ -2,7 +2,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: "standalone",
+  // Remove standalone output for now to fix deployment issues
+  // output: "standalone",
   images: {
     domains: ["localhost"],
   },
