@@ -138,7 +138,7 @@ export function InitiativeManager({ initiatives, onChange }: InitiativeManagerPr
                       Goal: ${initiative.goal_amount.toLocaleString()}
                     </p>
                   )}
-                  {initiative.suggested_amounts.length > 0 && (
+                  {initiative.suggested_amounts && initiative.suggested_amounts.length > 0 && (
                     <p className="text-sm text-gray-500 mt-1">
                       Suggested: ${formatSuggestedAmounts(initiative.suggested_amounts)}
                     </p>

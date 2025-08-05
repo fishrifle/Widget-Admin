@@ -1,58 +1,59 @@
 import { NextResponse } from "next/server";
-import { currentUser } from "@clerk/nextjs/server";
-import { supabaseAdmin } from "@/lib/supabase/server";
+import { auth } from "@clerk/nextjs/server";
+import { createClient } from "@/lib/supabase/server";
 
 export async function GET(req: Request) {
   try {
-    const user = await currentUser();
-    console.log("API: Current user:", user?.id);
+    const { userId } = await auth();
     
-    if (!user?.id) {
-      console.log("API: No user found");
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const userId = user.id;
 
-    const supabase = supabaseAdmin;
+    const supabase = await createClient();
 
-    // Check if user is super admin
+    // Get user's role and organization
     const { data: userData, error: userError } = await supabase
       .from("users")
-      .select("role")
+      .select("role, organization_id")
       .eq("id", userId)
       .single();
 
-    console.log("API: User data:", userData, "Error:", userError);
-
     if (userError) {
-      console.log("API: User lookup error:", userError);
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Temporarily bypass super admin check for testing
-    if (userData?.role !== "super_admin") {
-      console.log("API: User role check failed. Role:", userData?.role, "- bypassing for testing");
-      // return NextResponse.json({ error: "Forbidden - requires super admin" }, { status: 403 });
-    }
+    let organizations;
 
-    // Fetch all organizations
-    const { data: organizations, error } = await supabase
-      .from("organizations")
-      .select("*")
-      .order("created_at", { ascending: false });
+    if (userData?.role === "super_admin") {
+      // Super admins can see all organizations
+      const { data: allOrgs, error } = await supabase
+        .from("organizations")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    console.log("API: Organizations fetched:", organizations?.length || 0, "Error:", error);
+      if (error) throw error;
+      organizations = allOrgs;
+    } else if (userData?.organization_id) {
+      // Regular users can only see their own organization
+      const { data: userOrg, error } = await supabase
+        .from("organizations")
+        .select("*")
+        .eq("id", userData.organization_id)
+        .single();
 
-    if (error) {
-      console.log("API: Organizations fetch error:", error);
-      throw error;
+      if (error) throw error;
+      organizations = [userOrg];
+    } else {
+      // User has no organization
+      organizations = [];
     }
 
     return NextResponse.json(organizations);
   } catch (error) {
-    console.error("API: Unhandled error:", error);
+    console.error("Error fetching organizations:", error);
     return NextResponse.json(
-      { error: "Failed to fetch organizations", details: error instanceof Error ? error.message : String(error) },
+      { error: "Failed to fetch organizations" },
       { status: 500 }
     );
   }

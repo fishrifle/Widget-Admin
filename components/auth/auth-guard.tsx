@@ -31,45 +31,41 @@ export function AuthGuard({
       }
 
       try {
-        // Get user role and organization from Supabase
-        const { data: userData, error } = await supabase
-          .from("users")
-          .select("role, organization_id")
-          .eq("id", userId)
-          .single();
+        // Use API route instead of direct Supabase query to avoid 406 errors
+        const response = await fetch("/api/user/organization");
+        
+        if (!response.ok) {
+          console.error("Error fetching user data:", response.status);
+          // If API call fails, redirect to onboarding
+          router.push("/onboarding");
+          return;
+        }
 
-        if (error) {
-          console.error("Error fetching user data:", error);
-          // If user doesn't exist in Supabase, redirect to onboarding
-          if (error.code === 'PGRST116') {
-            router.push("/onboarding");
+        const { user: userData, organization } = await response.json();
+
+        if (!userData) {
+          // User doesn't exist, redirect to onboarding
+          router.push("/onboarding");
+          return;
+        }
+
+        setUserRole(userData.role);
+        setHasOrganization(!!userData.organization_id);
+
+        // Check role requirements
+        if (requiredRole) {
+          const roleHierarchy = ["editor", "owner", "super_admin"];
+          const userRoleIndex = roleHierarchy.indexOf(userData.role);
+          const requiredRoleIndex = roleHierarchy.indexOf(requiredRole);
+          
+          if (userRoleIndex < requiredRoleIndex) {
+            router.push("/dashboard");
             return;
           }
         }
 
-        if (userData) {
-          setUserRole(userData.role);
-          setHasOrganization(!!userData.organization_id);
-
-          // Check role requirements
-          if (requiredRole) {
-            const roleHierarchy = ["editor", "owner", "super_admin"];
-            const userRoleIndex = roleHierarchy.indexOf(userData.role);
-            const requiredRoleIndex = roleHierarchy.indexOf(requiredRole);
-            
-            if (userRoleIndex < requiredRoleIndex) {
-              router.push("/dashboard");
-              return;
-            }
-          }
-
-          // Check organization requirements
-          if (requiresOrganization && !userData.organization_id) {
-            router.push("/onboarding");
-            return;
-          }
-        } else {
-          // User not found in Supabase, redirect to onboarding
+        // Check organization requirements
+        if (requiresOrganization && !userData.organization_id) {
           router.push("/onboarding");
           return;
         }

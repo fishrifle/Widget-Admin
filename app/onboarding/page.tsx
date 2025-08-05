@@ -81,36 +81,31 @@ export default function OnboardingPage() {
 
     setLoading(true);
     try {
-      console.log("Creating organization in Supabase...");
+      console.log("Creating organization via API...");
 
-      // Create organization
-      const { data: organization, error: orgError } = await supabase
-        .from("organizations")
-        .insert({
+      const response = await fetch("/api/organizations/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           name: formData.displayName,
-          legal_name: formData.legalName,
           display_name: formData.displayName,
+          slug: formData.displayName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, ''),
           email: formData.email,
-          terms_of_service_url: formData.termsOfServiceUrl || null,
-          subscription_status: "trial",
-        })
-        .select()
-        .single();
+          website: formData.termsOfServiceUrl || "",
+          description: formData.description || "",
+          user_email: formData.email,
+        }),
+      });
 
-      if (orgError) throw orgError;
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to create organization");
+      }
 
-      // Create user record (using Clerk user ID)
-      const { error: userError } = await supabase
-        .from("users")
-        .upsert({
-          id: userId,
-          email: formData.email,
-          role: "owner",
-          organization_id: organization.id,
-          created_at: new Date().toISOString(),
-        });
-
-      if (userError) throw userError;
+      const result = await response.json();
+      console.log("Organization created successfully:", result);
 
       toast({
         title: "Welcome to PassItOn!",
@@ -125,7 +120,7 @@ export default function OnboardingPage() {
       console.error("Error creating organization:", error);
       toast({
         title: "Setup Error",
-        description: "Failed to create organization. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to create organization. Please try again.",
         variant: "destructive",
       });
     } finally {

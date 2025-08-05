@@ -263,7 +263,7 @@ export default function CustomizeWidgetPage() {
               showDonorList: true,
               allowRecurring: true,
               minimumDonation: 5,
-              suggestedAmounts: [10, 25, 50, 100]
+              suggestedAmounts: [10, 30, 60, 100, 200]
             }
           }}
           widgetId={widget.id}

@@ -114,7 +114,7 @@ export function WidgetCustomizer({
       showDonorList: false,
       allowRecurring: true,
       minimumDonation: 1,
-      suggestedAmounts: [25, 50, 100, 250, 500, 1000],
+      suggestedAmounts: [10, 30, 60, 100, 200],
       showCoverFees: true,
       defaultFrequency: "one-time",
     },
@@ -482,7 +482,7 @@ export function WidgetCustomizer({
 
                 <div>
                   <Label>Suggested Donation Amounts ($)</Label>
-                  <div className="grid grid-cols-3 gap-2 mt-1">
+                  <div className="grid grid-cols-5 gap-2 mt-1">
                     {config.settings.suggestedAmounts.map((amount, index) => (
                       <Input
                         key={index}
@@ -536,7 +536,6 @@ export function WidgetCustomizer({
                     <SelectContent>
                       <SelectItem value="one-time">One-time</SelectItem>
                       <SelectItem value="monthly">Monthly</SelectItem>
-                      <SelectItem value="yearly">Yearly</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

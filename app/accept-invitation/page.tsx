@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 
 export const dynamic = 'force-dynamic';
 import { useRouter, useSearchParams } from "next/navigation";
@@ -29,7 +29,7 @@ export default function AcceptInvitationPage() {
     try {
       const { data, error } = await supabase
         .from("users")
-        .select("*, organizations(name, display_name)")
+        .select("*")
         .eq("invitation_token", token)
         .eq("status", "pending")
         .single();

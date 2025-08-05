@@ -22,20 +22,19 @@ export const Sidebar = memo(function Sidebar() {
   const { userId } = useAuth();
   const [role, setRole] = useState<string | null>(null);
 
-  // Get user role from Supabase instead of Clerk
+  // Get user role from API instead of direct Supabase query
   useEffect(() => {
     async function fetchUserRole() {
       if (!userId) return;
       
       try {
-        const { data } = await supabase
-          .from("users")
-          .select("role")
-          .eq("id", userId)
-          .single();
+        const response = await fetch("/api/user/organization");
         
-        if (data) {
-          setRole(data.role);
+        if (response.ok) {
+          const { user } = await response.json();
+          if (user?.role) {
+            setRole(user.role);
+          }
         }
       } catch (error) {
         console.error("Error fetching user role:", error);
@@ -85,9 +84,6 @@ export const Sidebar = memo(function Sidebar() {
   ];
 
   const isActive = (itemHref: string) => {
-    // Debug logging
-    console.log(`Checking ${itemHref} against ${pathname}`);
-    
     if (itemHref === "/dashboard") {
       return pathname === "/dashboard";
     }
