@@ -1,0 +1,10 @@
+widget_scripts:
+  version: 1.x
+  css:
+    theme:
+      css/passiton-widget.css: {}
+  js:
+    js/passiton-widget.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

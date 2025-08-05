@@ -117,6 +117,8 @@ export function WidgetCustomizer({
       suggestedAmounts: [10, 30, 60, 100, 200],
       showCoverFees: true,
       defaultFrequency: "one-time",
+      paymentMethods: ["card", "ach"],
+      allowBankTransfer: true,
     },
   });
 
@@ -538,6 +540,44 @@ export function WidgetCustomizer({
                       <SelectItem value="monthly">Monthly</SelectItem>
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="space-y-3">
+                  <Label>Payment Methods</Label>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="allow-cards" className="font-normal">Accept Credit/Debit Cards</Label>
+                      <Switch
+                        id="allow-cards"
+                        checked={config.settings.paymentMethods?.includes("card") ?? true}
+                        onCheckedChange={(checked) => {
+                          const currentMethods = config.settings.paymentMethods || ["card"];
+                          const newMethods = checked 
+                            ? [...currentMethods.filter(m => m !== "card"), "card"]
+                            : currentMethods.filter(m => m !== "card");
+                          updateSettings("paymentMethods", newMethods);
+                        }}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="allow-bank" className="font-normal">Accept Bank Transfers (ACH)</Label>
+                      <Switch
+                        id="allow-bank"
+                        checked={config.settings.paymentMethods?.includes("ach") ?? false}
+                        onCheckedChange={(checked) => {
+                          const currentMethods = config.settings.paymentMethods || ["card"];
+                          const newMethods = checked 
+                            ? [...currentMethods.filter(m => m !== "ach"), "ach"]
+                            : currentMethods.filter(m => m !== "ach");
+                          updateSettings("paymentMethods", newMethods);
+                          updateSettings("allowBankTransfer", checked);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    Note: Bank transfers typically take 3-5 business days to process and may have lower processing fees.
+                  </p>
                 </div>
               </TabsContent>
             </Tabs>

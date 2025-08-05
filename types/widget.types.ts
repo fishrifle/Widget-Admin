@@ -22,6 +22,8 @@ export interface WidgetConfig {
     suggestedAmounts: number[];
     showCoverFees: boolean;
     defaultFrequency: "one-time" | "monthly" | "yearly";
+    paymentMethods?: string[];
+    allowBankTransfer?: boolean;
   };
 }
 

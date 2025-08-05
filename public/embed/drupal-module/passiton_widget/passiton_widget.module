@@ -1,0 +1,63 @@
+<?php
+
+/**
+ * @file
+ * PassItOn Widget module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function passiton_widget_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.passiton_widget':
+      return '<p>' . t('This module allows you to embed PassItOn donation widgets on your site using tokens like [passiton-widget:widget-slug] or blocks.') . '</p>';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function passiton_widget_theme($existing, $type, $theme, $path) {
+  return [
+    'passiton_widget_inline' => [
+      'variables' => [
+        'widget_url' => NULL,
+        'width' => '100%',
+        'height' => '600px',
+        'widget_id' => NULL,
+      ],
+    ],
+    'passiton_widget_modal' => [
+      'variables' => [
+        'widget_url' => NULL,
+        'widget_id' => NULL,
+        'button_text' => 'Donate Now',
+      ],
+    ],
+    'passiton_widget_sidebar' => [
+      'variables' => [
+        'widget_url' => NULL,
+        'widget_id' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function passiton_widget_page_attachments(array &$attachments) {
+  // Add CSS and JS when widgets are present
+  $current_path = \Drupal::service('path.current')->getPath();
+  $node = \Drupal::routeMatch()->getParameter('node');
+  
+  if ($node && $node->hasField('body')) {
+    $body = $node->get('body')->value;
+    if (strpos($body, '[passiton-widget:') !== FALSE) {
+      $attachments['#attached']['library'][] = 'passiton_widget/widget_scripts';
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Default theme implementation for inline PassItOn widget.
+ *
+ * Available variables:
+ * - widget_url: The URL of the widget.
+ * - width: Widget width.
+ * - height: Widget height.
+ * - widget_id: Unique widget identifier.
+ */
+#}
+<div id="{{ widget_id }}" class="passiton-widget-container" style="width: {{ width }}; height: {{ height }};">
+  <iframe 
+    src="{{ widget_url }}" 
+    width="100%" 
+    height="100%" 
+    frameborder="0" 
+    style="border: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"
+    title="PassItOn Donation Widget"
+    loading="lazy">
+  </iframe>
+</div>

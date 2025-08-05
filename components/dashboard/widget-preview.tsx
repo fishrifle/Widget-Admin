@@ -21,7 +21,7 @@ export function WidgetPreview({ config, mode }: WidgetPreviewProps) {
   return (
     <div
       className={`bg-gray-100 p-4 rounded-lg ${
-        mode === "mobile" ? "max-w-xs mx-auto" : "max-w-xs mx-auto"
+        mode === "mobile" ? "max-w-sm mx-auto" : "max-w-md mx-auto"
       }`}
     >
       {/* Color Guide Toggle */}
@@ -55,6 +55,11 @@ export function WidgetPreview({ config, mode }: WidgetPreviewProps) {
         <div className="widget-container space-y-2 text-xs">
           {/* Header - matching new widget design */}
           <div className="text-center relative">
+            {showColorGuide && (
+              <div className="absolute -top-2 -right-2 bg-yellow-300 text-xs px-2 py-1 rounded shadow-sm pointer-events-none z-10">
+                Header Color
+              </div>
+            )}
             <h1 
               className={`text-lg font-bold mb-1 text-${theme.headerAlignment}`} 
               style={{ color: theme.headerColor }}
@@ -69,11 +74,6 @@ export function WidgetPreview({ config, mode }: WidgetPreviewProps) {
               </div>
               <h2 className="text-sm font-semibold text-gray-800">Choose amount</h2>
             </div>
-            {showColorGuide && (
-              <div className="absolute -top-1 -right-1 bg-yellow-300 text-xs px-2 py-1 rounded shadow-sm pointer-events-none">
-                Header Color
-              </div>
-            )}
           </div>
 
           {/* Frequency Toggle - matching new widget design */}
@@ -144,8 +144,8 @@ export function WidgetPreview({ config, mode }: WidgetPreviewProps) {
           )}
 
           {/* Preset Amount Grid - matching new widget design */}
-          <div className="grid grid-cols-2 gap-1">
-            {settings.suggestedAmounts.map((amount, index) => {
+          <div className={`grid gap-1 ${mode === "mobile" ? "grid-cols-2" : "grid-cols-2"}`}>
+            {settings.suggestedAmounts.slice(0, mode === "mobile" ? 4 : 6).map((amount, index) => {
               const descriptions = [
                 "Empower Life Skills",
                 "Can Strengthen Career Development", 
@@ -157,13 +157,17 @@ export function WidgetPreview({ config, mode }: WidgetPreviewProps) {
               return (
                 <button
                   key={amount}
-                  className="p-2 rounded border text-left transition-all border-gray-200 bg-gray-50"
+                  className={`p-2 rounded border text-left transition-all border-gray-200 bg-gray-50 ${
+                    mode === "mobile" ? "text-xs" : "text-xs"
+                  }`}
                   style={{
                     borderRadius: theme.borderRadius,
                   }}
                 >
-                  <div className="font-bold text-sm text-gray-900">${amount}</div>
-                  <div className="text-xs text-gray-600 leading-tight">
+                  <div className={`font-bold text-gray-900 ${mode === "mobile" ? "text-xs" : "text-sm"}`}>
+                    ${amount}
+                  </div>
+                  <div className={`text-gray-600 leading-tight ${mode === "mobile" ? "text-xs" : "text-xs"}`}>
                     {descriptions[index] || "Support Our Mission"}
                   </div>
                 </button>

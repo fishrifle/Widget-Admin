@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PassItOn Widget Embed Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            background: white;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .test-section h2 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .widget-demo {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            background: #f8f9ff;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 PassItOn Widget Embed Test Page</h1>
+        <p>Test all embed styles for your demo presentation</p>
+        <div class="note success">
+            <strong>Ready for Demo!</strong> All widgets below will work for your WordPress and Drupal presentation.
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📋 Quick Configuration</h2>
+        <p>Replace <code>your-domain.com</code> with your actual domain in all embed files before demo:</p>
+        <div class="code-block">
+// In passiton-embed.js (line 11)
+domain: 'your-actual-domain.com'
+
+// In WordPress plugin (line 27)  
+'domain' => 'your-actual-domain.com'
+
+// In README examples
+https://your-actual-domain.com/embed/passiton-embed.js
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="feature-card">
+            <h3>🔧 WordPress Integration</h3>
+            <p><strong>Plugin Method:</strong></p>
+            <div class="code-block">[passiton_widget slug="demo-widget" style="modal"]</div>
+            
+            <p><strong>Manual Method:</strong></p>
+            <div class="code-block">&lt;div data-passiton-widget="demo-widget" data-style="modal"&gt;&lt;/div&gt;</div>
+        </div>
+
+        <div class="feature-card">
+            <h3>📁 Drupal Integration</h3>
+            <p><strong>Token Method:</strong></p>
+            <div class="code-block">[passiton-widget:demo-widget:modal]</div>
+            
+            <p><strong>Block Method:</strong></p>
+            <div class="code-block">Structure → Block Layout → Add PassItOn Widget Block</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎨 Style 1: Inline Widget</h2>
+        <p>Embeds directly in page content with custom dimensions</p>
+        
+        <div class="widget-demo">
+            <div data-passiton-widget="demo-widget" data-style="inline" data-width="100%" data-height="400px"></div>
+        </div>
+        
+        <div class="code-block">
+&lt;div data-passiton-widget="demo-widget" data-style="inline" data-width="100%" data-height="400px"&gt;&lt;/div&gt;
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 Style 2: Modal Widget</h2>
+        <p>Shows as a button that opens a beautiful popup overlay</p>
+        
+        <div class="widget-demo">
+            <div data-passiton-widget="demo-widget" data-style="modal" data-button-text="💝 Support Our Cause"></div>
+        </div>
+        
+        <div class="code-block">
+&lt;div data-passiton-widget="demo-widget" data-style="modal" data-button-text="💝 Support Our Cause"&gt;&lt;/div&gt;
+        </div>
+        
+        <div class="note">
+            <strong>Demo Tip:</strong> Click the button above to show the modal functionality!
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📌 Style 3: Sidebar Widget</h2>
+        <p>Fixed position sliding tab - accessible from anywhere on the page</p>
+        
+        <div class="widget-demo">
+            <div data-passiton-widget="demo-widget" data-style="sidebar"></div>
+            <p style="text-align: center; margin: 20px 0;">
+                <strong>Look for the "💝 Donate" tab on the right side of your screen!</strong>
+            </p>
+        </div>
+        
+        <div class="code-block">
+&lt;div data-passiton-widget="demo-widget" data-style="sidebar"&gt;&lt;/div&gt;
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🚀 Programmatic Usage</h2>
+        <p>Create widgets dynamically with JavaScript</p>
+        
+        <div id="dynamic-widget" class="widget-demo">
+            <button class="btn" onclick="createDynamicWidget()">Create Dynamic Widget</button>
+            <div id="widget-container" style="margin-top: 20px;"></div>
+        </div>
+        
+        <div class="code-block">
+PassItOnEmbed.create('#widget-container', {
+  slug: 'demo-widget',
+  style: 'inline',
+  width: '100%',
+  height: '300px'
+});
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📱 Responsive Design Test</h2>
+        <p>All widgets are fully responsive. Resize your browser to test!</p>
+        
+        <div class="grid">
+            <div class="widget-demo">
+                <h4>Desktop Size</h4>
+                <div data-passiton-widget="demo-widget" data-style="inline" data-width="100%" data-height="250px"></div>
+            </div>
+            <div class="widget-demo">
+                <h4>Mobile-Friendly</h4>
+                <div data-passiton-widget="demo-widget" data-style="modal" data-button-text="Mobile Donate"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 Demo Checklist</h2>
+        <div class="note success">
+            <strong>Before your demo:</strong>
+            <ul>
+                <li>✅ Replace domain placeholders in all files</li>
+                <li>✅ Test widget slug exists in your admin</li>
+                <li>✅ Upload embed files to your server</li>
+                <li>✅ Install WordPress plugin on demo site</li>
+                <li>✅ Install Drupal module on demo site</li>
+                <li>✅ Test all three widget styles</li>
+                <li>✅ Verify mobile responsiveness</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎭 Demo Script Ideas</h2>
+        <div class="code-block">
+"Let me show you how easy it is to embed donation widgets:
+
+1. WordPress: Simply use [passiton_widget slug="your-widget"]
+2. Drupal: Use [passiton-widget:your-widget:modal] 
+3. Any website: Add our JavaScript and use data attributes
+
+Watch this - I can show the widget as inline, modal, or sidebar..."
+        </div>
+    </div>
+
+    <!-- Load the PassItOn embed script -->
+    <script src="passiton-embed.js"></script>
+    
+    <!-- Demo functionality -->
+    <script>
+        function createDynamicWidget() {
+            const container = document.getElementById('widget-container');
+            container.innerHTML = '<p>Creating widget...</p>';
+            
+            setTimeout(() => {
+                PassItOnEmbed.create('#widget-container', {
+                    slug: 'demo-widget',
+                    style: 'inline',
+                    width: '100%',
+                    height: '300px'
+                });
+            }, 500);
+        }
+        
+        // Demo analytics
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'passiton-donation-complete') {
+                alert('🎉 Demo donation completed! In production, this would trigger analytics and thank you messages.');
+            }
+        });
+        
+        console.log('🎯 PassItOn Embed Test Page Loaded');
+        console.log('📋 Ready for WordPress and Drupal demo!');
+    </script>
+</body>
+</html>

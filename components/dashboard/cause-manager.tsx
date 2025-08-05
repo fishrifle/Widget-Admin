@@ -13,14 +13,35 @@ interface CauseManagerProps {
   onChange: (causes: Cause[]) => void;
 }
 
+const SUGGESTED_CAUSES = [
+  "General Persevere Support",
+  "Sponsor a Dev", 
+  "Tech Alliance",
+  "The Greatest Need",
+  "Unlock Potential",
+  "Epic Youth",
+  "Tennessee Community Programs",
+  "Canvas Training Hub",
+  "Skills Development",
+  "Digital Literacy",
+  "Mentorship Programs",
+  "Scholarship Fund",
+  "Equipment & Resources",
+  "Community Outreach",
+  "Innovation Lab",
+];
+
 export function CauseManager({ causes, onChange }: CauseManagerProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [newCause, setNewCause] = useState({
     name: "",
     description: "",
     goalAmount: "",
   });
+
+  const MAX_CAUSES = 5;
 
   const handleAdd = () => {
     if (newCause.name) {
@@ -46,6 +67,11 @@ export function CauseManager({ causes, onChange }: CauseManagerProps) {
 
   const handleDelete = (id: string) => {
     onChange(causes.filter((c) => c.id !== id));
+  };
+
+  const handleUseSuggestion = (suggestion: string) => {
+    setNewCause({ ...newCause, name: suggestion });
+    setShowSuggestions(false);
   };
 
   return (
@@ -147,12 +173,42 @@ export function CauseManager({ causes, onChange }: CauseManagerProps) {
 
       {isAdding ? (
         <Card className="p-4 space-y-3">
-          <Input
-            value={newCause.name}
-            onChange={(e) => setNewCause({ ...newCause, name: e.target.value })}
-            placeholder="Cause name"
-            autoFocus
-          />
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label>Cause Name</Label>
+              <Button
+                onClick={() => setShowSuggestions(!showSuggestions)}
+                size="sm"
+                variant="ghost"
+                className="text-xs text-blue-600 hover:text-blue-700"
+              >
+                {showSuggestions ? "Hide" : "Show"} Suggestions
+              </Button>
+            </div>
+            <Input
+              value={newCause.name}
+              onChange={(e) => setNewCause({ ...newCause, name: e.target.value })}
+              placeholder="Type your custom cause name"
+              autoFocus
+            />
+            
+            {showSuggestions && (
+              <div className="grid grid-cols-2 gap-2 p-3 bg-gray-50 rounded-lg max-h-40 overflow-y-auto">
+                {SUGGESTED_CAUSES.filter(suggestion => 
+                  !causes.some(cause => cause.name === suggestion)
+                ).map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleUseSuggestion(suggestion)}
+                    className="text-left text-xs p-2 bg-white border border-gray-200 rounded hover:bg-blue-50 hover:border-blue-300 transition-colors"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          
           <Textarea
             value={newCause.description}
             onChange={(e) =>
@@ -170,12 +226,13 @@ export function CauseManager({ causes, onChange }: CauseManagerProps) {
             placeholder="Goal amount (optional)"
           />
           <div className="flex gap-2">
-            <Button onClick={handleAdd} size="sm">
-              Add Cause
+            <Button onClick={handleAdd} size="sm" disabled={!newCause.name.trim()}>
+              Add Cause ({causes.length + 1}/{MAX_CAUSES})
             </Button>
             <Button
               onClick={() => {
                 setIsAdding(false);
+                setShowSuggestions(false);
                 setNewCause({ name: "", description: "", goalAmount: "" });
               }}
               size="sm"
@@ -186,14 +243,27 @@ export function CauseManager({ causes, onChange }: CauseManagerProps) {
           </div>
         </Card>
       ) : (
-        <Button
-          onClick={() => setIsAdding(true)}
-          variant="outline"
-          className="w-full"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Cause
-        </Button>
+        <div className="space-y-2">
+          {causes.length < MAX_CAUSES ? (
+            <Button
+              onClick={() => setIsAdding(true)}
+              variant="outline"
+              className="w-full"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Cause ({causes.length}/{MAX_CAUSES})
+            </Button>
+          ) : (
+            <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-700 font-medium">
+                Maximum {MAX_CAUSES} causes added ✓
+              </p>
+              <p className="text-xs text-blue-600 mt-1">
+                You can edit or remove existing causes to add new ones
+              </p>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

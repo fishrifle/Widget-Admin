@@ -1,0 +1,9 @@
+name: PassItOn Widget
+type: module
+description: 'Embed PassItOn donation widgets anywhere on your Drupal site'
+core_version_requirement: ^8 || ^9 || ^10
+package: Custom
+dependencies:
+  - drupal:filter
+  - drupal:block
+configure: passiton_widget.settings

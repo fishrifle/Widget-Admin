@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Default theme implementation for modal PassItOn widget.
+ *
+ * Available variables:
+ * - widget_url: The URL of the widget.
+ * - widget_id: Unique widget identifier.
+ * - button_text: Text for the donate button.
+ */
+#}
+<div class="passiton-modal-trigger">
+  <button id="{{ widget_id }}-trigger" class="passiton-donate-btn">
+    💝 {{ button_text|default('Donate Now') }}
+  </button>
+  <div id="{{ widget_id }}-modal" class="passiton-modal" style="display: none;">
+    <div class="passiton-modal-content">
+      <span class="passiton-close">&times;</span>
+      <iframe 
+        src="{{ widget_url }}" 
+        width="100%" 
+        height="100%" 
+        frameborder="0" 
+        style="border: none;"
+        title="PassItOn Donation Widget"
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+</div>
