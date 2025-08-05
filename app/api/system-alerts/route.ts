@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Filter out acknowledged alerts for non-admin users
-    const filteredAlerts = alerts?.filter(alert => {
+    const filteredAlerts = alerts?.filter((alert: any) => {
       if (userData.role === "super_admin") return true;
       return !alert.acknowledged_by.includes(user.id);
     }) || [];
