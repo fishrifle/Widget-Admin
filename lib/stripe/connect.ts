@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 
 if (!process.env.STRIPE_SECRET_KEY) {
+  console.error("STRIPE_SECRET_KEY environment variable is not set");
   throw new Error("STRIPE_SECRET_KEY is not set");
 }
 

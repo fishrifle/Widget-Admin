@@ -83,6 +83,7 @@ export function OrganizationSettings({ organizationId }: OrganizationSettingsPro
         actionUrl: status.actionUrl,
       });
     } catch (error) {
+      console.log("No Stripe account yet, which is fine");
       // No Stripe account yet, which is fine
       setStripeStatus({
         connected: false,
@@ -134,12 +135,17 @@ export function OrganizationSettings({ organizationId }: OrganizationSettingsPro
 
   const handleConnectStripe = async () => {
     try {
+      console.log("Starting Stripe Connect setup for organization:", organizationId);
+      if (!organizationId) {
+        throw new Error("Organization ID is missing");
+      }
       await createConnectAccount(organizationId);
     } catch (error) {
       console.error("Error connecting Stripe:", error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to set up Stripe Connect";
       toast({
         title: "Error",
-        description: "Failed to set up Stripe Connect",
+        description: errorMessage,
         variant: "destructive",
       });
     }

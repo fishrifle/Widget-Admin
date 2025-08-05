@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { supabaseAdmin } from "@/lib/supabase/server";
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 // GET /api/notifications/preferences - Get user's notification preferences
 export async function GET(request: NextRequest) {
   try {

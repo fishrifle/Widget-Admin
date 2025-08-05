@@ -3,6 +3,9 @@ import { currentUser } from "@clerk/nextjs/server";
 import { createClient } from "@/lib/supabase/server";
 import { checkAccountOnboardingStatus } from "@/lib/stripe/connect";
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: Request) {
   try {
     const user = await currentUser();
@@ -36,11 +39,11 @@ export async function GET(req: Request) {
     // Get organization's Stripe account ID
     const { data: organization } = await supabase
       .from("organizations")
-      .select("stripe_account_id, stripe_onboarding_complete")
+      .select("stripe_connect_account_id, stripe_connect_status")
       .eq("id", organizationId)
       .single();
 
-    if (!organization || !organization.stripe_account_id) {
+    if (!organization || !organization.stripe_connect_account_id) {
       return NextResponse.json(
         { error: "No Stripe account found for this organization" },
         { status: 404 }
@@ -48,21 +51,22 @@ export async function GET(req: Request) {
     }
 
     // Check onboarding status with Stripe
-    const status = await checkAccountOnboardingStatus(organization.stripe_account_id);
+    const status = await checkAccountOnboardingStatus(organization.stripe_connect_account_id);
 
     // Update local database if onboarding status changed
-    if (status.onboardingComplete !== organization.stripe_onboarding_complete) {
+    const newStatus = status.onboardingComplete ? 'connected' : 'pending';
+    if (newStatus !== organization.stripe_connect_status) {
       await supabase
         .from("organizations")
         .update({
-          stripe_onboarding_complete: status.onboardingComplete,
+          stripe_connect_status: newStatus,
           updated_at: new Date().toISOString(),
         })
         .eq("id", organizationId);
     }
 
     return NextResponse.json({
-      accountId: organization.stripe_account_id,
+      accountId: organization.stripe_connect_account_id,
       ...status,
     });
   } catch (error) {

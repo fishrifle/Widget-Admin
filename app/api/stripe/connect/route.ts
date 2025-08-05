@@ -5,12 +5,18 @@ import { createConnectAccount } from "@/lib/stripe/connect";
 
 export async function POST(req: Request) {
   try {
+    console.log("Stripe Connect API: Starting request");
+    
     const user = await currentUser();
     if (!user?.id) {
+      console.log("Stripe Connect API: No user found");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    console.log("Stripe Connect API: User authenticated:", user.id);
+
     const { organizationId } = await req.json();
+    console.log("Stripe Connect API: Organization ID:", organizationId);
     
     if (!organizationId) {
       return NextResponse.json(
@@ -47,7 +53,7 @@ export async function POST(req: Request) {
     }
 
     // Check if already has Stripe account
-    if (organization.stripe_account_id) {
+    if (organization.stripe_connect_account_id) {
       return NextResponse.json(
         { error: "Organization already has a Stripe account" },
         { status: 400 }
@@ -75,7 +81,8 @@ export async function POST(req: Request) {
     const { error: updateError } = await supabase
       .from("organizations")
       .update({
-        stripe_account_id: accountId,
+        stripe_connect_account_id: accountId,
+        stripe_connect_status: 'pending',
         updated_at: new Date().toISOString(),
       })
       .eq("id", organizationId);
